@@ -80,12 +80,14 @@ export const createOpenApiNodeHttpHandler = <
             do {
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
               ({ done, value } = await reader.read());
+              console.log('done', done, 'value', value);
               if (!done) {
                 res.write(`data: ${Buffer.from(value.buffer).toString()}\n\n`);
                 // @ts-expect-error flush is not in the types
                 res.flush();
               }
             } while (!done);
+            res.write('data: [DONE]\n\n');
           } catch (error) {
             console.error('Error while reading from stream', error);
           } finally {
